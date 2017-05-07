@@ -4,7 +4,7 @@ import scala.annotation.tailrec
 
 object CommandExecutor {
 
-  def apply(commandSequence: CommandSequence, rules: List[Rule]): List[String] = {
+  def apply(commandSequence: CommandSequence, rules: List[Rule] = DefaultRules()): List[String] = {
 
     val temp = commandSequence.temperature
 
@@ -21,13 +21,6 @@ object CommandExecutor {
 
     loop(commandSequence, DressState.initialState, List.empty)
 
-  }
-
-  def apply(temperature: Temperature, commandNumbers: List[Int], rules: List[Rule] = DefaultRules()): List[String] = {
-
-    val commands: List[Command] = commandNumbers.map(IntToCommand(_))
-
-    apply(CommandSequence(temperature, commands), rules)
   }
 
 }

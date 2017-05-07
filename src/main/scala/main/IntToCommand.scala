@@ -1,4 +1,6 @@
-package functional
+package main
+
+import functional._
 
 object IntToCommand {
 
