@@ -1,3 +1,3 @@
 package functional
 
-case class CommandSequence(temperature: Temperature, commands: IndexedSeq[Command])
+case class CommandSequence(temperature: Temperature, commands: List[Command])

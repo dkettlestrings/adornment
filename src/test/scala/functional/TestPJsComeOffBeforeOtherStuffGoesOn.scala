@@ -4,13 +4,13 @@ import org.scalatest.{FunSpec, Matchers}
 
 class TestPJsComeOffBeforeOtherStuffGoesOn extends FunSpec with Matchers {
 
-  val pjsOff = DressState(None, None, None, None, None, None, None)
-
   describe("PJsComeOffBeforeOtherStuffGoesOn") {
+
+    val pjsOff = DressState.nude
 
     it("should fail if pjs are on and you try to put on clothes") {
 
-      PJsComeOffBeforeOtherStuffGoesOn(DressState.initialState, PutOn(Socks), HOT) should be (Fail)
+      PJsComeOffBeforeOtherStuffGoesOn(DressState.initialState, PutOnFootwear, HOT) should be (Fail)
 
     }
 
@@ -28,7 +28,8 @@ class TestPJsComeOffBeforeOtherStuffGoesOn extends FunSpec with Matchers {
 
     it("should pass if pjs are off and you try to put on clothes") {
 
-      PJsComeOffBeforeOtherStuffGoesOn(pjsOff, PutOn(Socks), HOT) should be (Pass)
+
+      PJsComeOffBeforeOtherStuffGoesOn(pjsOff, PutOnSocks, HOT) should be (Pass)
 
     }
 

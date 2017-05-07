@@ -1,41 +1,40 @@
 package functional
 
 import org.scalatest.{FunSpec, Matchers}
+import language.postfixOps
 
 class TestOnlyOneOfEachKind extends FunSpec with Matchers {
 
   describe("OnlyOneOfEachKind") {
 
-    val withFootwear = DressState(Some(Sandals), None, None, None, None, None, None)
-    val withHeadwear = DressState(None, Some(Hat), None, None, None, None, None)
-    val withSocks = DressState(None, None, Some(Socks), None, None, None, None)
-    val withShirt = DressState(None, None, None, Some(Shirt), None, None, None)
-    val withJacket = DressState(None, None, None, None, Some(Jacket), None, None)
-    val withLegwear = DressState(None, None, None, None, None, Some(Pants), None)
+    val withFootwear = DressState.initialState withFootwear
+    val withHeadwear = DressState.initialState withHeadWear
+    val withSocks = DressState.initialState withSocks
+    val withShirt = DressState.initialState withShirt
+    val withJacket = DressState.initialState withJacket
+    val withLegwear = DressState.initialState withPants
     val withPajamas = DressState.initialState
 
 
     it("should pass if you're putting on clothes you don't already have on") {
 
-      OnlyOneOfEachKind(withHeadwear, PutOn(Sandals), HOT) should be (Pass)
-      OnlyOneOfEachKind(withFootwear, PutOn(Hat), HOT) should be (Pass)
-      OnlyOneOfEachKind(withFootwear, PutOn(Socks), HOT) should be (Pass)
-      OnlyOneOfEachKind(withFootwear, PutOn(Shirt), HOT) should be (Pass)
-      OnlyOneOfEachKind(withFootwear, PutOn(Jacket), HOT) should be (Pass)
-      OnlyOneOfEachKind(withFootwear, PutOn(Pants), HOT) should be (Pass)
-      OnlyOneOfEachKind(withFootwear, PutOn(Pajamas), HOT) should be (Pass) // PutOn(Pajamas) *should* never happen*
+      OnlyOneOfEachKind(withHeadwear, PutOnFootwear, HOT) should be (Pass)
+      OnlyOneOfEachKind(withFootwear, PutOnHeadwear, HOT) should be (Pass)
+      OnlyOneOfEachKind(withFootwear, PutOnSocks, HOT) should be (Pass)
+      OnlyOneOfEachKind(withFootwear, PutOnShirt, HOT) should be (Pass)
+      OnlyOneOfEachKind(withFootwear, PutOnJacket, HOT) should be (Pass)
+      OnlyOneOfEachKind(withFootwear, PutOnPants, HOT) should be (Pass)
 
     }
 
     it("should fail if you're trying to put on clothes you already have on") {
 
-      OnlyOneOfEachKind(withFootwear, PutOn(Sandals), HOT) should be (Fail)
-      OnlyOneOfEachKind(withHeadwear, PutOn(Sunglasses), HOT) should be (Fail)
-      OnlyOneOfEachKind(withSocks, PutOn(Socks), HOT) should be (Fail)
-      OnlyOneOfEachKind(withShirt, PutOn(Shirt), HOT) should be (Fail)
-      OnlyOneOfEachKind(withJacket, PutOn(Jacket), HOT) should be (Fail)
-      OnlyOneOfEachKind(withLegwear, PutOn(Shorts), HOT) should be (Fail)
-      OnlyOneOfEachKind(withPajamas, PutOn(Pajamas), HOT) should be (Fail) // PutOn(Pajamas) *should* never happen*
+      OnlyOneOfEachKind(withFootwear, PutOnFootwear, HOT) should be (Fail)
+      OnlyOneOfEachKind(withHeadwear, PutOnHeadwear, HOT) should be (Fail)
+      OnlyOneOfEachKind(withSocks, PutOnSocks, HOT) should be (Fail)
+      OnlyOneOfEachKind(withShirt, PutOnShirt, HOT) should be (Fail)
+      OnlyOneOfEachKind(withJacket, PutOnJacket, HOT) should be (Fail)
+      OnlyOneOfEachKind(withLegwear, PutOnPants, HOT) should be (Fail)
 
     }
 

@@ -1,36 +1,37 @@
 package functional
 
 import org.scalatest.{FunSpec, Matchers}
+import language.postfixOps
 
 class TestShirtBeforeHeadwear extends FunSpec with Matchers {
 
-  val withShirt = DressState(None, None, None, Some(Shirt), None, None, None)
-  val noShirt = DressState(None, None, None, None, None, None, None)
-  val withSunglasses = DressState(None, Some(Sunglasses), None, None, None, None, None)
+  val withShirt = DressState.nude withShirt
+  val noShirt = DressState.nude
+  val withHeadwear = DressState.nude withHeadWear
 
   describe("ShirtBeforeHeadwear") {
 
     it("should pass if you have on a shirt and you try to put on headwear") {
 
-      ShirtBeforeHeadwear(withShirt, PutOn(Sunglasses), COLD) should be (Pass)
+      ShirtBeforeHeadwear(withShirt, PutOnHeadwear, COLD) should be (Pass)
 
     }
 
     it("should pass if you have on no shirt and you try to put on headwear") {
 
-      ShirtBeforeHeadwear(noShirt, PutOn(Sunglasses), COLD) should be (Pass)
+      ShirtBeforeHeadwear(noShirt, PutOnHeadwear, COLD) should be (Pass)
 
     }
 
     it("should fail if you have on headwear and you try to put on a shirt") {
 
-      ShirtBeforeHeadwear(withSunglasses, PutOn(Shirt), COLD) should be (Fail)
+      ShirtBeforeHeadwear(withHeadwear, PutOnShirt, COLD) should be (Fail)
 
     }
 
     it("should pass if you're not trying to put on headwear") {
 
-      ShirtBeforeHeadwear(withShirt, PutOn(Socks), COLD) should be (Pass)
+      ShirtBeforeHeadwear(withShirt, PutOnSocks, COLD) should be (Pass)
 
     }
 
