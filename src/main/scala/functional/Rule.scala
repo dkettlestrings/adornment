@@ -6,7 +6,7 @@ object PJsComeOffBeforeOtherStuffGoesOn extends Rule {
 
   override def apply(state: DressState, command: Command, temperature: Temperature): RuleOutcome = command match {
 
-    case _: PutOn => if(state.pajamas) Fail else Pass
+    case _: PutOn => if(state == PJsOnly) Fail else Pass
     case _ => Pass
   }
 
@@ -16,14 +16,11 @@ object OnlyOneOfEachKind extends Rule {
 
   override def apply(state: DressState, command: Command, temperature: Temperature): RuleOutcome = command match {
 
-    case PutOnFootwear => if(state.footwear) Fail else Pass
-    case PutOnHeadwear => if(state.headwear) Fail else Pass
-    case PutOnSocks => if(state.socks) Fail else Pass
-    case PutOnShirt => if(state.shirt) Fail else Pass
-    case PutOnJacket => if(state.jacket) Fail else Pass
-    case PutOnPants => if(state.legwear) Fail else Pass
+    case clothing: PutOn => if(state has clothing) Fail else Pass
     case _ => Pass
+      
   }
+
 }
 
 object NoSocksWhenHot extends Rule {
@@ -58,7 +55,7 @@ object SocksBeforeFootwear extends Rule {
 
   override def apply(state: DressState, command: Command, temperature: Temperature): RuleOutcome = command match {
 
-    case PutOnSocks => if(state.footwear) Fail else Pass
+    case PutOnSocks => if(state has PutOnFootwear) Fail else Pass
     case _ => Pass
   }
 }
@@ -67,7 +64,7 @@ object LegwearBeforeFootwear extends Rule {
 
   override def apply(state: DressState, command: Command, temperature: Temperature): RuleOutcome = command match {
 
-    case PutOnPants => if(state.footwear) Fail else Pass
+    case PutOnPants => if(state has PutOnFootwear) Fail else Pass
     case _ => Pass
   }
 }
@@ -76,7 +73,7 @@ object ShirtBeforeHeadwear extends Rule {
 
   override def apply(state: DressState, command: Command, temperature: Temperature): RuleOutcome = command match {
 
-    case PutOnShirt => if(state.headwear) Fail else Pass
+    case PutOnShirt => if(state has PutOnHeadwear) Fail else Pass
     case _ => Pass
   }
 }
@@ -85,7 +82,7 @@ object ShirtBeforeJacket extends Rule {
 
   override def apply(state: DressState, command: Command, temperature: Temperature): RuleOutcome = command match {
 
-    case PutOnShirt => if(state.jacket) Fail else Pass
+    case PutOnShirt => if(state has PutOnJacket) Fail else Pass
     case _ => Pass
   }
 }
@@ -94,9 +91,9 @@ object AllClothesOnBeforeLeaving extends Rule {
 
   override def apply(state: DressState, command: Command, temperature: Temperature): RuleOutcome = {
 
-    val hotWeatherClothes = DressState.nude.withFootwear.withHeadWear.withShirt.withPants
+    val hotWeatherClothes = DressState.nude + PutOnFootwear + PutOnHeadwear + PutOnShirt + PutOnPants
 
-    val coldWeatherClothes = DressState.nude.withFootwear.withHeadWear.withSocks.withShirt.withJacket.withPants
+    val coldWeatherClothes = hotWeatherClothes + PutOnSocks + PutOnJacket
 
     command match {
 

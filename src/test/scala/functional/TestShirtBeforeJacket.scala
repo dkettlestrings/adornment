@@ -1,13 +1,12 @@
 package functional
 
 import org.scalatest.{FunSpec, Matchers}
-import language.postfixOps
 
 class TestShirtBeforeJacket extends FunSpec with Matchers {
 
-  val withShirt = DressState.nude withShirt
+  val withShirt = DressState.nude + PutOnShirt
   val noShirt = DressState.nude
-  val withJacket = DressState.nude withJacket
+  val withJacket = DressState.nude + PutOnJacket
 
   describe("ShirtBeforeJacket") {
 

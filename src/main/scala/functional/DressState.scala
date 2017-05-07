@@ -1,50 +1,47 @@
 package functional
 
-import language.postfixOps
+trait DressState {
 
-case class DressState(footwear: Boolean,
-                      headwear: Boolean,
-                      socks: Boolean,
-                      shirt: Boolean,
-                      jacket: Boolean,
-                      legwear: Boolean,
-                      pajamas: Boolean) {
+  def +(command: Command): DressState
 
-  def apply(command: Command, temperature: Temperature): DressState = command match {
+  def -(command: Command): DressState
 
-    case TakeOffPajamas => this withoutPajamas
-    case PutOnFootwear => this withFootwear
-    case PutOnHeadwear => this withHeadWear
-    case PutOnSocks => this withSocks
-    case PutOnShirt => this withShirt
-    case PutOnJacket => this withJacket
-    case PutOnPants => this withPants
-    case LeaveHouse => this
+  def has(command: PutOn): Boolean
+
+}
+
+case object PJsOnly extends DressState {
+
+  override def +(command: Command): DressState = command match {
+
+    case TakeOffPajamas => DressState.nude
+    case _ => this
   }
 
-  def withPajamas = DressState(footwear, headwear, socks, shirt, jacket, legwear, pajamas = true)
-  def withoutPajamas = DressState(footwear, headwear, socks, shirt, jacket, legwear, pajamas = false)
-  def withFootwear = DressState(footwear = true, headwear, socks, shirt, jacket, legwear, pajamas)
-  def withOutFootwear = DressState(footwear = false, headwear, socks, shirt, jacket, legwear, pajamas)
-  def withHeadWear = DressState(footwear, headwear = true, socks, shirt, jacket, legwear, pajamas)
-  def withSocks = DressState(footwear, headwear, socks = true, shirt, jacket, legwear, pajamas)
-  def withShirt = DressState(footwear, headwear, socks, shirt = true, jacket, legwear, pajamas)
-  def withOutShirt = DressState(footwear, headwear, socks, shirt = false, jacket, legwear, pajamas)
-  def withJacket = DressState(footwear, headwear, socks, shirt, jacket = true, legwear, pajamas)
-  def withPants = DressState(footwear, headwear, socks, shirt, jacket, legwear = true, pajamas)
+  override def -(command: Command): DressState = this
+
+  override def has(command: PutOn): Boolean = false
+
+}
+
+case class NoPJsState(appliedCommands: Set[Command]) extends DressState {
+
+  override def +(command: Command): DressState = {
+
+    NoPJsState(this.appliedCommands + command)
+  }
+
+  override def -(command: Command): DressState = {
+
+    NoPJsState(appliedCommands - command)
+  }
+
+  override def has(command: PutOn): Boolean = appliedCommands.contains(command)
+
 }
 
 object DressState {
 
-  val initialState = DressState(
-    footwear = false,
-    headwear = false,
-    socks = false,
-    shirt = false,
-    jacket = false,
-    legwear = false,
-    pajamas = true
-  )
+  val nude = NoPJsState(Set.empty)
 
-  val nude = DressState.initialState withoutPajamas
 }

@@ -1,19 +1,17 @@
 package functional
 
 import org.scalatest.{FunSpec, Matchers}
-import language.postfixOps
 
 class TestOnlyOneOfEachKind extends FunSpec with Matchers {
 
   describe("OnlyOneOfEachKind") {
 
-    val withFootwear = DressState.initialState withFootwear
-    val withHeadwear = DressState.initialState withHeadWear
-    val withSocks = DressState.initialState withSocks
-    val withShirt = DressState.initialState withShirt
-    val withJacket = DressState.initialState withJacket
-    val withLegwear = DressState.initialState withPants
-    val withPajamas = DressState.initialState
+    val withFootwear = DressState.nude + PutOnFootwear
+    val withHeadwear = DressState.nude + PutOnHeadwear
+    val withSocks = DressState.nude + PutOnSocks
+    val withShirt = DressState.nude + PutOnShirt
+    val withJacket = DressState.nude + PutOnJacket
+    val withLegwear = DressState.nude + PutOnPants
 
 
     it("should pass if you're putting on clothes you don't already have on") {
