@@ -1,13 +1,12 @@
 package functional
 
 import org.scalatest.{FunSpec, Matchers}
-import language.postfixOps
 
 class TestLegwearBeforeFootwear extends FunSpec with Matchers {
 
-  val withPants = DressState.nude withPants
+  val withPants = DressState.nude + PutOnPants
   val noPants = DressState.nude
-  val witwithFootwearSandals = DressState.nude withFootwear
+  val withFootwear = DressState.nude + PutOnFootwear
 
   describe("LegwearBeforeFootwear") {
 
@@ -25,19 +24,19 @@ class TestLegwearBeforeFootwear extends FunSpec with Matchers {
 
     it("should fail if you have on footwear and you try to put on legwear") {
 
-      LegwearBeforeFootwear(witwithFootwearSandals, PutOnPants, HOT) should be (Fail)
+      LegwearBeforeFootwear(withFootwear, PutOnPants, HOT) should be (Fail)
 
     }
 
     it("should pass if you're not trying to put on legwear") {
 
-      LegwearBeforeFootwear(witwithFootwearSandals, PutOnHeadwear, HOT) should be (Pass)
+      LegwearBeforeFootwear(withFootwear, PutOnHeadwear, HOT) should be (Pass)
 
     }
 
     it("should pass if you're not trying to put on anything") {
 
-      LegwearBeforeFootwear(witwithFootwearSandals, LeaveHouse, HOT) should be (Pass)
+      LegwearBeforeFootwear(withFootwear, LeaveHouse, HOT) should be (Pass)
 
     }
   }

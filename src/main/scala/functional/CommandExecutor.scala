@@ -14,12 +14,12 @@ object CommandExecutor {
       case Nil => accumulator
       case c :: tail => RuleRunner.run(currentState, c, temp, rules) match {
 
-        case Pass => loop(CommandSequence(temp, tail), currentState.apply(c, temp), accumulator :+ c.message(temp))
+        case Pass => loop(CommandSequence(temp, tail), currentState + c, accumulator :+ c.message(temp))
         case Fail => accumulator :+ "fail"
       }
     }
 
-    loop(commandSequence, DressState.initialState, List.empty)
+    loop(commandSequence, PJsOnly, List.empty)
 
   }
 

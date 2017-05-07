@@ -23,19 +23,19 @@ class TestRuleRunner extends FunSpec with Matchers {
 
     it("should pass if all rules pass") {
 
-      RuleRunner.run(DressState.initialState, PutOnFootwear, COLD, List(PassingRule1, PassingRule2)) should be (Pass)
+      RuleRunner.run(PJsOnly, PutOnFootwear, COLD, List(PassingRule1, PassingRule2)) should be (Pass)
 
     }
 
     it("should pass if there are no rules") {
 
-      RuleRunner.run(DressState.initialState, PutOnFootwear, COLD, List.empty) should be (Pass)
+      RuleRunner.run(PJsOnly, PutOnFootwear, COLD, List.empty) should be (Pass)
 
     }
 
     it("should fail if one of the rules fails") {
 
-      RuleRunner.run(DressState.initialState, PutOnFootwear, COLD, List(PassingRule1, PassingRule2, FailingRule)) should be (Fail)
+      RuleRunner.run(PJsOnly, PutOnFootwear, COLD, List(PassingRule1, PassingRule2, FailingRule)) should be (Fail)
 
     }
   }
